@@ -5,3 +5,5 @@ htllo tale
 北京你好
 
 西安加油
+
+Go CHINA
