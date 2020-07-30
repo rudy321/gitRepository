@@ -6,4 +6,4 @@ htllo tale
 
 西安加油
 
-Go CHINA
+Go CHINA HA
