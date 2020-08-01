@@ -1,0 +1,17 @@
+ SELECT to_char(o.actual_date_t,'yyyy-MM-dd') as actualDate,
+   p.description, o.batch_code_s,    
+   nvl(mm.dumpquantity,0) AS dumpQuantity,
+   nvl(om.quantity_f,0)   AS actualQuantity
+    FROM orderitem_uv o
+    LEFT JOIN part_uv p ON o.part_number = p.part_number    
+    LEFT JOIN at_pmorderexecution om ON om.order_number_s = o.order_item
+    LEFT JOIN (    
+   SELECT m.batch_code_s, NVL(SUM(m.quantity_f) ,0) AS dumpQuantity
+    FROM at_mmmaterialconsumption m 
+    WHERE m.step_number_s='010' GROUP BY m.batch_code_s
+   ) mm ON o.batch_code_s = mm.batch_code_s 
+   AND om.step_number_s='010'
+    AND o.order_type_i=2 
+    AND o.finished_quantity_f>0
+    AND o.order_state IN ('7','8')
+    ORDER BY o.actual_date_t, o.batch_code_s
